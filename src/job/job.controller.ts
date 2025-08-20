@@ -1,0 +1,31 @@
+import { Controller, Get, NotFoundException, Param } from '@nestjs/common';
+import { JobService } from './job.service';
+import { Job } from './job.schema';
+import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
+
+@ApiTags('Jobs')
+@Controller('jobs')
+export class JobController {
+  constructor(private readonly jobService: JobService) {}
+
+  @Get()
+  @ApiOperation({ summary: 'Récupère tous les jobs' })
+  @ApiResponse({ status: 200, description: 'Liste des jobs' })
+  findAll(): Promise<Job[]> {
+    return this.jobService.findAll();
+  }
+
+  @Get(':id')
+  @ApiOperation({ summary: 'Récupère un job par ID' })
+  @ApiParam({ name: 'id', type: Number })
+  @ApiResponse({ status: 200, description: 'Job trouvé' })
+  @ApiResponse({ status: 404, description: 'Job non trouvé' })
+  async findOne(@Param('id') id: string): Promise<Job> {
+    const job = await this.jobService.findOne(id);
+
+    if (!job)
+      throw new NotFoundException(`No job found with id ${id}`)
+
+    return job;
+  }
+}
