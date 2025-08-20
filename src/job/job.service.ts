@@ -34,7 +34,7 @@ export class JobService {
         return newJob.save();
     }
 
-    async remove(id: number) {
-        return this.jobModel.findOneAndDelete({ id }).exec();
+    async remove(id: string) {
+        return this.jobModel.findByIdAndDelete(id).exec();
     }
 }

@@ -1,3 +1,6 @@
+import * as dotenv from 'dotenv';
+dotenv.config();
+
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -11,6 +14,7 @@ async function bootstrap() {
     .setTitle('RPG API')
     .setDescription('API pour gérer le RPG')
     .setVersion('1.0')
+    .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT', in: "header"}, "admin-token")
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
