@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Job, JobDocument } from './job.schema';
 import { Id, IdDocument } from '../id/id.schema';
+import { JobDto, UpdateJobDto } from './job.dto';
 
 @Injectable()
 export class JobService {
@@ -28,13 +29,21 @@ export class JobService {
         return this.jobModel.findById(id).exec();
     }
 
-    async create(job: { name: string; power: number }) {
+    async create(dto: JobDto) {
         const _id = await this.getNextId('job');
-        const newJob = new this.jobModel({ ...job, _id });
+        const newJob = new this.jobModel({ ...dto, _id });
         return newJob.save();
     }
 
     async remove(id: string) {
         return this.jobModel.findByIdAndDelete(id).exec();
+    }
+
+    async update(id: string, dto: UpdateJobDto) {
+        console.log("Update !" + id);
+        return this.jobModel.findByIdAndUpdate(id, dto, {
+            new: true,       // retourne le document mis à jour
+            runValidators: true // applique les validateurs du schéma
+        }).exec();
     }
 }
