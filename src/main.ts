@@ -14,11 +14,17 @@ async function bootstrap() {
     .setTitle('RPG API')
     .setDescription('API pour gérer le RPG')
     .setVersion('1.0')
-    .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT', in: "header"}, "admin-token")
+    .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT', in: "header" }, "admin-token")
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document); // /api pour l’UI Swagger
+
+  app.enableCors({
+    origin: '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true,
+  });
 
   const port = process.env.PORT ?? 3000;
   await app.listen(port);
