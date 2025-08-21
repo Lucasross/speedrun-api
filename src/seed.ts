@@ -5,6 +5,7 @@ import { Model } from 'mongoose';
 import { Id, IdDocument } from './id/id.schema';
 import { Job, JobDocument } from './job/job.schema';
 import { getModelToken } from '@nestjs/mongoose';
+import { JobDto } from './job/job.dto';
 
 async function bootstrap() {
     const app = await NestFactory.createApplicationContext(AppModule);
@@ -12,11 +13,12 @@ async function bootstrap() {
     const jobModel = app.get<Model<JobDocument>>(getModelToken(Job.name));
     const idModel = app.get<Model<IdDocument>>(getModelToken(Id.name));
 
-    const jobs = [
-        { name: 'Guerrier', power: 15 },
-        { name: 'Mage', power: 12 },
-        { name: 'Voleur', power: 10 },
-        { name: 'Paladin', power: 18 },
+    const jobs: JobDto[] = [
+        { 
+            name: 'Guerrier', description: 'A fierce warrior', 
+            base_health: 120, grow_health: 0.01,
+            base_damage: 25, grow_damage: 0.02,
+        },
     ];
 
     // Supprime tous les jobs existants avant de reseed
