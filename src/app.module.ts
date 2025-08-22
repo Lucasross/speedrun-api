@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { JobModule } from './job/job.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
+import { StatModule } from './stat/stat.module';
 
 @Module({
   imports: [
@@ -13,7 +14,7 @@ import { AuthModule } from './auth/auth.module';
       ssl: true,  
       family: 4,
       serverSelectionTimeoutMS: 5000,}), 
-    JobModule, AuthModule,
+    JobModule, AuthModule, StatModule
   ],
   controllers: [AppController],
   providers: [AppService],
