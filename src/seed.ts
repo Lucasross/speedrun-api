@@ -1,50 +1,24 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { JobService } from './job/job.service';
-import { Model } from 'mongoose';
-import { Id, IdDocument } from './id/id.schema';
-import { Job, JobDocument } from './job/job.schema';
-import { getModelToken } from '@nestjs/mongoose';
-import { JobDto } from './job/job.dto';
+import { StatService } from './stat/stat.service';
+import { Logger } from '@nestjs/common';
 
 async function bootstrap() {
     const app = await NestFactory.createApplicationContext(AppModule);
     const jobService = app.get(JobService);
-    const jobModel = app.get<Model<JobDocument>>(getModelToken(Job.name));
-    const idModel = app.get<Model<IdDocument>>(getModelToken(Id.name));
+    const statService = app.get(StatService);
+    const logger = new Logger("Seed");
 
-    const jobs: JobDto[] = [
-        { 
-            name: 'Guerrier', description: 'A fierce warrior', 
-            base_health: 120, grow_health: 0.01,
-            base_damage: 25, grow_damage: 0.02,
-        },
-    ];
+    const arg = process.argv[2];
 
-    // Supprime tous les jobs existants avant de reseed
-    await jobModel.collection.drop().catch(err => {
-        if (err.code === 26) {
-            console.log('Collection is empty, no need to drop.');
-        } else {
-            throw err;
-        }
-    });
+    logger.log(`Start with ${arg ? arg : "all"}`);
 
-    // Reset le counter
-    await idModel.findByIdAndUpdate(
-        'job',
-        { seq: 0 },
-        { upsert: true }
-    );
-
-    // Crée les jobs
-    for (const job of jobs) {
-        await jobService.create(job as any);
-        console.log(`Create job : ${job.name}`);
-    }
+    if (arg === 'stat' || !arg) await statService.seed();
+    if (arg === 'job' || !arg) await jobService.seed();
 
     await app.close();
-    console.log('Seed terminé !');
+    logger.log('Finish');
 }
 
 bootstrap();
