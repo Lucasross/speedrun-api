@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsOptional, IsNumber, IsObject } from 'class-validator';
+import { IsString, IsNotEmpty, IsNumber, IsObject } from 'class-validator';
 import { ApiProperty, PartialType } from '@nestjs/swagger';
 
 export class JobDto {

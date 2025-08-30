@@ -5,13 +5,15 @@ import { JobController } from './job.controller';
 import { Job, JobSchema } from './job.schema';
 import { Id, IdSchema } from '../id/id.schema';
 import { StatModule } from 'src/stat/stat.module';
+import { Skill, SkillSchema } from 'src/skill/skill.schema';
 
 @Module({
   imports: [MongooseModule.forFeature(
     [
       { name: Job.name, schema: JobSchema },
-      { name: Id.name, schema: IdSchema }
-    ]), StatModule], 
+      { name: Id.name, schema: IdSchema },
+      { name: Skill.name, schema: SkillSchema }, // to virtual populate
+    ]), StatModule],
   controllers: [JobController],
   providers: [JobService],
 })

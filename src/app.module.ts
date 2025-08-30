@@ -6,6 +6,7 @@ import { JobModule } from './job/job.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { StatModule } from './stat/stat.module';
+import { SkillModule } from './skill/skill.module';
 
 @Module({
   imports: [
@@ -14,7 +15,7 @@ import { StatModule } from './stat/stat.module';
       ssl: true,  
       family: 4,
       serverSelectionTimeoutMS: 5000,}), 
-    JobModule, AuthModule, StatModule
+    JobModule, AuthModule, StatModule, SkillModule
   ],
   controllers: [AppController],
   providers: [AppService],

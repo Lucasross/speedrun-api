@@ -3,7 +3,7 @@ import { Document } from 'mongoose';
 
 export type JobDocument = Job & Document;
 
-@Schema()
+@Schema({ toJSON: { virtuals: true }, toObject: { virtuals: true } })
 export class Job {
   @Prop({ required: true })
   _id: string;
@@ -19,3 +19,9 @@ export class Job {
 }
 
 export const JobSchema = SchemaFactory.createForClass(Job);
+
+JobSchema.virtual('skills', {
+  ref: 'Skill',          // le model à référencer
+  localField: '_id',     // clé locale dans Job
+  foreignField: 'job',   // clé dans Skill qui référence Job
+});
