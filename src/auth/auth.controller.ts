@@ -3,9 +3,6 @@ import { AuthService } from './auth.service';
 import { ApiProperty, ApiBody } from '@nestjs/swagger';
 
 export class LoginDto {
-  @ApiProperty({ example: 'admin@example.com' })
-  email: string;
-
   @ApiProperty({ example: 'password123' })
   password: string;
 }
@@ -16,7 +13,7 @@ export class AuthController {
 
   @Post('login')
   @ApiBody({ type: LoginDto })
-  async login(@Body() body: { email: string; password: string }) {
-    return this.authService.login(body.email, body.password);
+  async login(@Body() body: LoginDto) {
+    return this.authService.login(body);
   }
 }

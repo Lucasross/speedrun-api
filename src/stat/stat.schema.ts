@@ -14,6 +14,9 @@ export class Stat {
   @Prop({ required: true, enum: ['attribute', 'common', 'physical', 'magic', 'faith', 'regeneration'] })
   type: 'attribute' | 'common' | 'physical' | 'magic' | 'faith' | 'regeneration';
 
+  @Prop({required: true})
+  usages: string[];
+
   @Prop({ required: true, default: 1 })
   weight: number;
 

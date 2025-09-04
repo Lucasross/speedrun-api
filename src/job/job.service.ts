@@ -1,10 +1,11 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { Job, JobDocument } from './job.schema';
 import { Id, IdDocument } from '../id/id.schema';
 import { JobDto, UpdateJobDto } from './job.dto';
 import { StatService } from 'src/stat/stat.service';
+import { Skill, SkillDocument } from 'src/skill/skill.schema';
 
 @Injectable()
 export class JobService {
@@ -13,6 +14,7 @@ export class JobService {
     constructor(
         @InjectModel(Job.name) private jobModel: Model<JobDocument>,
         @InjectModel(Id.name) private idModel: Model<IdDocument>,
+        @InjectModel(Skill.name) private skillModel: Model<SkillDocument>,
         private readonly statService: StatService,
     ) { }
 
@@ -26,7 +28,7 @@ export class JobService {
     }
 
     findAll() {
-        return this.jobModel.find().exec();
+        return this.jobModel.find().populate("skills").exec();
     }
 
     findOne(id: string) {
@@ -44,11 +46,21 @@ export class JobService {
     }
 
     async update(id: string, dto: UpdateJobDto) {
-        console.log("Update !" + id);
         return this.jobModel.findByIdAndUpdate(id, dto, {
             new: true,       // retourne le document mis à jour
             runValidators: true // applique les validateurs du schéma
         }).exec();
+    }
+
+    async skills(id: string) {
+        // Vérifie que le job existe
+        const jobExists = await this.jobModel.findById(id);
+
+        if (!jobExists)
+            throw new NotFoundException('Job not found');
+
+        // Récupère les skills associés
+        return this.skillModel.find({ job: id }).exec();
     }
 
     async seed() {
@@ -59,9 +71,17 @@ export class JobService {
             acc[stat.name] = stat.defaultValue ?? 0;
             return acc;
         }, {} as Record<string, number>);
-        
+
         const jobs: JobDto[] = [
-            {name: "Warrior", description: "A fierce human.", stats: defaultStats}
+            {
+                name: "Warrior", description: "A fierce human.",
+                stats: {
+                    ...defaultStats,
+                    'Base Health': 100, 'Grow Health': 1, 'Base Damage': 20, 'Grow Damage': 1,
+                    'Heavy Damage': 30, 'Heavy Damage %': 15, 'Physical Resistance': 20, 'Physical Resistance %': 10,
+                    'Life Regeneration': 10, 'Life Regeneration %': 1
+                }
+            }
         ];
 
         // Supprime tous les jobs existants avant de reseed
