@@ -15,6 +15,9 @@ export class Skill {
   @Prop({ required: true })
   description: string;
 
+  @Prop({ required: true, enum: ['single', 'multi', 'passive', 'buff', 'active'] })
+  type: 'single' | 'multi' | 'passive' | 'buff' | 'active';
+
   @Prop({ required: true })
   level: number;
 

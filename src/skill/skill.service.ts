@@ -16,18 +16,19 @@ export class SkillService {
     @InjectModel(Id.name) private idModel: Model<IdDocument>,
   ) { }
 
-  private async getNextId(name: string): Promise<number> {
+  private async getNextId(name: string): Promise<string> {
     const counter = await this.idModel.findByIdAndUpdate(
       name,
       { $inc: { seq: 1 } },
       { new: true, upsert: true },
     );
-    return counter.seq;
+    return counter.seq.toString();
   }
 
   async create(skillDto: SkillDto): Promise<Skill> {
     const _id = await this.getNextId('skill');
-    const newSkill = new this.skillModel({ _id, ...skillDto });
+    skillDto['_id'] = _id;
+    const newSkill = new this.skillModel(skillDto);
     return newSkill.save();
   }
 
@@ -75,8 +76,9 @@ export class SkillService {
     // Définir un skill par défaut
     const skills: SkillDto[] = [
       {
-        name: 'Slash', description: 'A strong hit.', level: 1, stats: { damage: 10, damage_percent: 5, cooldown: 4 },
+        name: 'Slash', description: 'A strong hit.', level: 1, stats: { 'Damage': 10, 'Damage %': 5, 'Cooldown': 4 },
         job: warriorJob._id.toString(),
+        type: 'single',
       }
     ];
 

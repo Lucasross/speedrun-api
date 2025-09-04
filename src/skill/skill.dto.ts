@@ -1,5 +1,5 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
-import { IsString, IsNotEmpty, IsNumber, IsObject, IsMongoId } from 'class-validator';
+import { IsString, IsNotEmpty, IsNumber, IsObject, IsMongoId, IsEnum } from 'class-validator';
 
 export class SkillDto {
   @ApiProperty({ example: 'Tourbillon', description: 'Skill name.' })
@@ -11,6 +11,11 @@ export class SkillDto {
   @IsString()
   @IsNotEmpty()
   description: string;
+
+  @ApiProperty({ example: 'Single.', description: 'The type of skill.' })
+  @IsEnum(['single', 'multi', 'passive', 'buff', 'active'])
+  @IsNotEmpty()
+  type: 'single' | 'multi' | 'passive' | 'buff' | 'active';
 
   @ApiProperty({ example: { damage: 50, cooldown: 5 }, description: 'Skill statistics.' })
   @IsObject()

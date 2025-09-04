@@ -56,7 +56,7 @@ export class JobService {
         // Vérifie que le job existe
         const jobExists = await this.jobModel.findById(id);
 
-        if (!jobExists) 
+        if (!jobExists)
             throw new NotFoundException('Job not found');
 
         // Récupère les skills associés
@@ -73,7 +73,15 @@ export class JobService {
         }, {} as Record<string, number>);
 
         const jobs: JobDto[] = [
-            { name: "Warrior", description: "A fierce human.", stats: defaultStats }
+            {
+                name: "Warrior", description: "A fierce human.",
+                stats: {
+                    ...defaultStats,
+                    'Base Health': 100, 'Grow Health': 1, 'Base Damage': 20, 'Grow Damage': 1,
+                    'Heavy Damage': 30, 'Heavy Damage %': 15, 'Physical Resistance': 20, 'Physical Resistance %': 10,
+                    'Life Regeneration': 10, 'Life Regeneration %': 1
+                }
+            }
         ];
 
         // Supprime tous les jobs existants avant de reseed
