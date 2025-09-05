@@ -21,7 +21,8 @@
     "seed": "ts-node -r tsconfig-paths/register src/seed.ts",
     "seed:stat": "npm run seed -- stat",
     "seed:job": "npm run seed -- job",
-    "seed:skill": "npm run seed -- skill"
+    "seed:skill": "npm run seed -- skill",
+    "seed:area": "npm run seed -- area"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
