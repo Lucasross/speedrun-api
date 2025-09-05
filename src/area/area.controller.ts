@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, UseGuards } from '@nestjs/common';
 import { AreaService } from './area.service';
 import { AreaDto, UpdateAreaDto } from './area.dto';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -36,7 +36,7 @@ export class AreaController {
     return this.areaService.findOne(id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(@Param('id') id: string, @Body() updateAreaDto: UpdateAreaDto) {
     return this.areaService.update(id, updateAreaDto);
   }

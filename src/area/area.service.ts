@@ -55,9 +55,9 @@ export class AreaService {
   }
 
   async seed() {
-    this.logger.log('[Seed] Start Skills');
+    this.logger.log('[Seed] Start Areas');
 
-    // Définir un skill par défaut
+    // Définir un area par défaut
     const areas: AreaDto[] = [
       {
         name: 'Wendalavir', 
@@ -67,28 +67,28 @@ export class AreaService {
       }
     ];
 
-    // Supprime tous les skills existants avant de reseed
+    // Supprime tous les areas existants avant de reseed
     await this.areaModel.collection.drop().catch(err => {
       if (err.code === 26) {
-        console.log('[Seed] Skill collection is empty, no need to drop.');
+        console.log('[Seed] Area collection is empty, no need to drop.');
       } else {
         throw err;
       }
     });
 
-    // Reset le counter (si tu as un compteur de skills)
+    // Reset le counter (si tu as un compteur de areas)
     await this.idModel.findByIdAndUpdate(
-      'skill',
+      'area',
       { seq: 0 },
       { upsert: true }
     );
 
-    // Crée les skills
+    // Crée les areas
     for (const area of areas) {
       await this.create(area);
       this.logger.log(`[Seed] Create area : ${area.name}`);
     }
 
-    this.logger.log('[Seed] Finish Skills');
+    this.logger.log('[Seed] Finish Areas');
   }
 }
