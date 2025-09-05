@@ -7,6 +7,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { StatModule } from './stat/stat.module';
 import { SkillModule } from './skill/skill.module';
+import { AreaModule } from './area/area.module';
 
 @Module({
   imports: [
@@ -15,7 +16,7 @@ import { SkillModule } from './skill/skill.module';
       ssl: true,  
       family: 4,
       serverSelectionTimeoutMS: 5000,}), 
-    JobModule, AuthModule, StatModule, SkillModule
+    JobModule, AuthModule, StatModule, SkillModule, AreaModule
   ],
   controllers: [AppController],
   providers: [AppService],

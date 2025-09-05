@@ -4,12 +4,14 @@ import { JobService } from './job/job.service';
 import { StatService } from './stat/stat.service';
 import { Logger } from '@nestjs/common';
 import { SkillService } from './skill/skill.service';
+import { AreaService } from './area/area.service';
 
 async function bootstrap() {
     const app = await NestFactory.createApplicationContext(AppModule);
     const statService = app.get(StatService);
     const jobService = app.get(JobService);
     const skillService = app.get(SkillService);
+    const areaService = app.get(AreaService);
 
 
     const logger = new Logger("Seed");
@@ -21,6 +23,7 @@ async function bootstrap() {
     if (arg === 'stat' || !arg) await statService.seed();
     if (arg === 'job' || !arg) await jobService.seed();
     if (arg === 'skill' || !arg) await skillService.seed();
+    if (arg === 'area' || !arg) await areaService.seed();
 
     await app.close();
     logger.log('Finish');
