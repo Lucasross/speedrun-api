@@ -36,6 +36,7 @@ export class AreaController {
     return this.areaService.findOne(id);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Put(':id')
   update(@Param('id') id: string, @Body() updateAreaDto: UpdateAreaDto) {
     return this.areaService.update(id, updateAreaDto);
