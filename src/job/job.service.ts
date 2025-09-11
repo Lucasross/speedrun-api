@@ -66,19 +66,12 @@ export class JobService {
     async seed() {
         this.logger.log("[Seed] Start");
 
-        const stats = await this.statService.findAll();
-        const defaultStats = stats.filter(s => s.usages.includes('job')).reduce((acc, stat) => {
-            acc[stat.name] = stat.defaultValue ?? 0;
-            return acc;
-        }, {} as Record<string, number>);
-
         const jobs: JobDto[] = [
             {
                 name: "Warrior", description: "A fierce human.",
                 stats: {
-                    ...defaultStats,
                     'Base Health': 100, 'Base Damage': 20,
-                    'Heavy Damage %': 30, 'Physical Resistance %': 20, 'Block %': 20,
+                    'Heavy Damage %': 20, 'Physical Resistance %': 20, 'Block %': 10,
                     'Life Regeneration %': 1
                 }
             }

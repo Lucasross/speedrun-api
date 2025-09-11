@@ -32,12 +32,12 @@ export class StatService {
 
         await this.statModel.insertMany([
             // ================ ATTRIBUTES ================ 5
-            { name: 'Strength', description: 'Increases physical power and raw damage.', type: 'attribute', usages: ['job', 'skill'], weight: 1, default: 5 },
-            { name: 'Constitution', description: 'Increases health and physical resistance.', type: 'attribute', usages: ['job', 'skill'], weight: 1, default: 5 },
-            { name: 'Agility', description: 'Improves attack speed and dodge chance.', type: 'attribute', usages: ['job', 'skill'], weight: 1, default: 5 },
-            { name: 'Perseverance', description: 'Improves defense and tenacity.', type: 'attribute', usages: ['job', 'skill'], weight: 1, default: 5 },
-            { name: 'Faith', description: 'Improves holy power and mana regeneration.', type: 'attribute', usages: ['job', 'skill'], weight: 1, default: 5 },
-            { name: 'Magic', description: 'Improves magic power and magic resistance.', type: 'attribute', usages: ['job', 'skill'], weight: 1, default: 5 },
+            { name: 'Strength', description: 'Increases physical power and raw damage.', type: 'attribute', usages: ['skill'], weight: 1, default: 5 },
+            { name: 'Constitution', description: 'Increases health and physical resistance.', type: 'attribute', usages: ['skill'], weight: 1, default: 5 },
+            { name: 'Agility', description: 'Improves attack speed and dodge chance.', type: 'attribute', usages: ['skill'], weight: 1, default: 5 },
+            { name: 'Perseverance', description: 'Improves defense and tenacity.', type: 'attribute', usages: ['skill'], weight: 1, default: 5 },
+            { name: 'Faith', description: 'Improves holy power and mana regeneration.', type: 'attribute', usages: ['skill'], weight: 1, default: 5 },
+            { name: 'Magic', description: 'Improves magic power and magic resistance.', type: 'attribute', usages: ['skill'], weight: 1, default: 5 },
 
             // ================ COMMON ================ 6
             { name: 'Base Health', description: 'Base health of the job.', type: 'common', usages: ['job', 'monster'], weight: 1, default: 100 },
