@@ -1,7 +1,13 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { IsString, IsNotEmpty, IsNumber, IsObject, IsMongoId, IsEnum } from 'class-validator';
+import type { ObjectId, Types } from 'mongoose';
 
 export class SkillDto {
+  @ApiProperty({ example: '1', description: 'Api ID.' })
+  @IsString()
+  @IsNotEmpty()
+  api_id: string;
+
   @ApiProperty({ example: 'Tourbillon', description: 'Skill name.' })
   @IsString()
   @IsNotEmpty()
@@ -29,7 +35,7 @@ export class SkillDto {
 
   @ApiProperty({ example: '64b8b7dc3e1234567890abcd', description: 'Related Job ID.' })
   @IsMongoId()
-  job: string;
+  job: Types.ObjectId;
 }
 
 export class UpdateSkillDto extends PartialType(SkillDto) { }

@@ -24,8 +24,8 @@ export class AreaService {
   }
 
   async create(createAreaDto: AreaDto) {
-    const _id = await this.getNextId('area');
-    createAreaDto['_id'] = _id;
+    const api_id = await this.getNextId('area');
+    createAreaDto['api_id'] = api_id;
     const newArea = new this.areaModel(createAreaDto);
     return newArea.save();
   }
@@ -35,21 +35,21 @@ export class AreaService {
   }
 
   async findOne(id: string) {
-    const area = await this.areaModel.findById(id).exec();
+    const area = await this.areaModel.find({ api_id: id }).populate('sectors').exec();
     if (!area) throw new NotFoundException('Area not found');
     return area;
   }
 
   async update(id: string, updateAreaDto: UpdateAreaDto) {
     const updated = await this.areaModel
-      .findByIdAndUpdate(id, updateAreaDto, { new: true })
+      .findOneAndUpdate({ api_id: id }, updateAreaDto, { new: true })
       .exec();
     if (!updated) throw new NotFoundException('Area not found');
     return updated;
   }
 
   async remove(id: string) {
-    const deleted = await this.areaModel.findByIdAndDelete(id).exec();
+    const deleted = await this.areaModel.findOneAndDelete({ api_id: id }).exec();
     if (!deleted) throw new NotFoundException('Area not found');
     return deleted;
   }
@@ -60,7 +60,8 @@ export class AreaService {
     // Définir un area par défaut
     const areas: AreaDto[] = [
       {
-        name: 'Wendalavir', 
+        api_id: "1",
+        name: 'Wendalavir',
         description: 'A peaceful area surrounded by plains and forest.',
         position_x: 0.5,
         position_y: 0.5,

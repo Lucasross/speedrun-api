@@ -4,7 +4,6 @@ import { Job } from './job.schema';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBearerAuth, ApiBody } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { JobDto, UpdateJobDto } from './job.dto';
-import { Skill } from 'src/skill/skill.schema';
 
 @ApiTags('Job')
 @ApiBearerAuth('admin-token')
@@ -15,21 +14,13 @@ export class JobController {
   @Get()
   @ApiOperation({ summary: 'Récupère tous les jobs' })
   @ApiResponse({ status: 200, description: 'Liste des jobs' })
-  findAll(): Promise<Job[]> {
+  findAll() {
     return this.jobService.findAll();
   }
 
   @Get(':id')
-  @ApiOperation({ summary: 'Récupère un job par ID' })
-  @ApiResponse({ status: 200, description: 'Job trouvé' })
-  @ApiResponse({ status: 404, description: 'Job non trouvé' })
-  async findOne(@Param('id') id: string): Promise<Job> {
-    const job = await this.jobService.findOne(id);
-
-    if (!job)
-      throw new NotFoundException(`No job found with id ${id}`)
-
-    return job;
+  findOne(@Param('id') id: string) {
+    return this.jobService.findOne(id);
   }
 
   @UseGuards(AuthGuard('jwt'))
@@ -61,13 +52,5 @@ export class JobController {
   @ApiBody({ type: JobDto })
   async update(@Param('id') id: string, @Body() dto: UpdateJobDto) {
     return this.jobService.update(id, dto);
-  }
-
-  @Get(':id/skills')
-  @ApiOperation({ summary: 'Get all skill of a job' })
-  @ApiResponse({ status: 200, description: 'Job found' })
-  @ApiResponse({ status: 404, description: 'Job not found' })
-  async skills(@Param('id') id: string): Promise<Skill[]> {
-    return this.jobService.skills(id);
   }
 }

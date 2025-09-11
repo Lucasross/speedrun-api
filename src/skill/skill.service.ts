@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { Skill, SkillDocument } from './skill.schema';
 import { SkillDto, UpdateSkillDto } from './skill.dto';
 import { Job, JobDocument } from '../job/job.schema';
@@ -26,8 +26,8 @@ export class SkillService {
   }
 
   async create(skillDto: SkillDto): Promise<Skill> {
-    const _id = await this.getNextId('skill');
-    skillDto['_id'] = _id;
+    const api_id = await this.getNextId('skill');
+    skillDto['api_id'] = api_id;
     const newSkill = new this.skillModel(skillDto);
     return newSkill.save();
   }
@@ -37,26 +37,26 @@ export class SkillService {
   }
 
   async findOne(id: string): Promise<Skill> {
-    const skill = await this.skillModel.findById(id).exec(); //.populate('job')
+    const skill = await this.skillModel.findOne({ api_id: id }).exec(); //.populate('job')
     if (!skill) throw new NotFoundException('Skill not found');
     return skill;
   }
 
   async findOneWithJob(id: string): Promise<Skill> {
-    const skill = await this.skillModel.findById(id).populate('job').exec();
+    const skill = await this.skillModel.findOne({ api_id: id }).populate('job').exec();
     if (!skill) throw new NotFoundException('Skill not found');
     return skill;
   }
 
   async remove(id: string): Promise<Skill> {
-    const deleted = await this.skillModel.findByIdAndDelete(id).exec();
+    const deleted = await this.skillModel.findOneAndDelete({ api_id: id }).exec();
     if (!deleted) throw new NotFoundException('Skill not found');
     return deleted;
   }
 
   async update(id: string, updateSkillDto: UpdateSkillDto): Promise<Skill> {
     const updated = await this.skillModel
-      .findByIdAndUpdate(id, updateSkillDto, { new: true })
+      .findOneAndUpdate({ api_id: id }, updateSkillDto, { new: true })
       .populate('job')
       .exec();
     if (!updated) throw new NotFoundException('Skill not found');
@@ -76,8 +76,9 @@ export class SkillService {
     // Définir un skill par défaut
     const skills: SkillDto[] = [
       {
+        api_id: "1",
         name: 'Slash', description: 'A strong hit.', level: 1, stats: { 'Damage': 10, 'Damage %': 5, 'Cooldown': 4 },
-        job: warriorJob._id.toString(),
+        job: warriorJob._id as Types.ObjectId,
         type: 'single',
       }
     ];

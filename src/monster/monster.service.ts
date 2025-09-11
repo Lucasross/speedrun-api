@@ -24,8 +24,8 @@ export class MonsterService {
   }
 
   async create(createMonsterDto: MonsterDto) {
-    const _id = await this.getNextId();
-    createMonsterDto['_id'] = _id;
+    const api_id = await this.getNextId();
+    createMonsterDto['api_id'] = api_id;
     const newMonster = new this.monsterModel(createMonsterDto);
     return newMonster.save();
   }
@@ -35,21 +35,21 @@ export class MonsterService {
   }
 
   async findOne(id: number) {
-    const monster = await this.monsterModel.findById(id).exec();
+    const monster = await this.monsterModel.findOne({ api_id: id }).populate('sectors').exec();
     if (!monster) throw new NotFoundException('Monster not found');
     return monster;
   }
 
   async update(id: number, updateMonsterDto: UpdateMonsterDto) {
     const updated = await this.monsterModel
-      .findByIdAndUpdate(id, updateMonsterDto, { new: true })
+      .findOneAndUpdate({ api_id: id }, updateMonsterDto, { new: true })
       .exec();
     if (!updated) throw new NotFoundException('Monster not found');
     return updated;
   }
 
   async remove(id: number) {
-    const deleted = await this.monsterModel.findByIdAndDelete(id).exec();
+    const deleted = await this.monsterModel.findOneAndDelete({ api_id: id }).exec();
     if (!deleted) throw new NotFoundException('Monster not found');
     return deleted;
   }
@@ -60,6 +60,7 @@ export class MonsterService {
     // Définir un monster par défaut
     const monsters: MonsterDto[] = [
       {
+        api_id: "1",
         name: 'Wolf',
         description: 'A slighty fat wolf.',
         stats: {

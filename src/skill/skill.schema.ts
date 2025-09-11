@@ -7,7 +7,7 @@ export type SkillDocument = Skill & Document;
 @Schema()
 export class Skill {
   @Prop({ required: true })
-  _id: string;
+  api_id: string;
 
   @Prop({ required: true })
   name: string;
@@ -24,7 +24,15 @@ export class Skill {
   @Prop({ type: Object, required: true })
   stats: Record<string, number>;
 
-  @Prop({ type: Types.ObjectId, ref: Job.name, required: true })
+  @Prop({
+    type: Types.ObjectId, ref: Job.name, required: true,
+    set: (val: any) => {
+      if (typeof val === 'string') {
+        return Types.ObjectId.createFromHexString(val);
+      }
+      return val; // sinon on touche à rien
+    },
+  })
   job: Types.ObjectId;
 }
 

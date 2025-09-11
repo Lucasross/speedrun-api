@@ -2,6 +2,11 @@ import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { IsString, IsNotEmpty, IsNumber } from 'class-validator';
 
 export class AreaDto {
+    @ApiProperty({ example: '1', description: 'Api ID.' })
+    @IsString()
+    @IsNotEmpty()
+    api_id: string;
+
     @ApiProperty({ example: 'Granild', description: 'The name of the area. Also the name of the faction.' })
     @IsString()
     @IsNotEmpty()
