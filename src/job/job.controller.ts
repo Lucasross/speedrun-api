@@ -6,9 +6,9 @@ import { AuthGuard } from '@nestjs/passport';
 import { JobDto, UpdateJobDto } from './job.dto';
 import { Skill } from 'src/skill/skill.schema';
 
-@ApiTags('Jobs')
+@ApiTags('Job')
 @ApiBearerAuth('admin-token')
-@Controller('jobs')
+@Controller('job')
 export class JobController {
   constructor(private readonly jobService: JobService) { }
 

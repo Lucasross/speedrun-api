@@ -4,9 +4,9 @@ import { SkillDto, UpdateSkillDto } from './skill.dto';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBearerAuth, ApiBody } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 
-@ApiTags('Skills')
+@ApiTags('Skill')
 @ApiBearerAuth('admin-token')
-@Controller('skills')
+@Controller('skill')
 export class SkillController {
   constructor(private readonly skillService: SkillService) { }
 
