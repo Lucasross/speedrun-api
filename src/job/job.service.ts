@@ -18,49 +18,41 @@ export class JobService {
         private readonly statService: StatService,
     ) { }
 
-    private async getNextId(name: string): Promise<number> {
+    private async getNextId(name: string): Promise<string> {
         const counter = await this.idModel.findByIdAndUpdate(
             name,
             { $inc: { seq: 1 } },
             { new: true, upsert: true },
         );
-        return counter.seq;
+        return counter.seq.toString();
     }
 
     findAll() {
-        return this.jobModel.find().populate("skills").exec();
+        return this.jobModel.find().populate("skills").exec(); //.populate("skills")
     }
 
-    findOne(id: string) {
-        return this.jobModel.findById(id).exec();
+    async findOne(id: string) {
+        const job = await this.jobModel.findOne({ api_id: id }).populate('skills').exec();
+        if (!job) throw new NotFoundException('Job not found ' + id);
+        return job;
     }
 
     async create(dto: JobDto) {
-        const _id = await this.getNextId('job');
-        const newJob = new this.jobModel({ ...dto, _id });
+        const api_id = await this.getNextId('job');
+        dto['api_id'] = api_id;
+        const newJob = new this.jobModel(dto);
         return newJob.save();
     }
 
     async remove(id: string) {
-        return this.jobModel.findByIdAndDelete(id).exec();
+        return this.jobModel.findOneAndDelete({ api_id: id }).exec();
     }
 
     async update(id: string, dto: UpdateJobDto) {
-        return this.jobModel.findByIdAndUpdate(id, dto, {
+        return this.jobModel.findOneAndUpdate({ api_id: id }, dto, {
             new: true,       // retourne le document mis à jour
             runValidators: true // applique les validateurs du schéma
         }).exec();
-    }
-
-    async skills(id: string) {
-        // Vérifie que le job existe
-        const jobExists = await this.jobModel.findById(id);
-
-        if (!jobExists)
-            throw new NotFoundException('Job not found');
-
-        // Récupère les skills associés
-        return this.skillModel.find({ job: id }).exec();
     }
 
     async seed() {
@@ -68,6 +60,7 @@ export class JobService {
 
         const jobs: JobDto[] = [
             {
+                api_id: "1",
                 name: "Warrior", description: "A fierce human.",
                 stats: {
                     'Base Health': 100, 'Base Damage': 20,

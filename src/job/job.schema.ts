@@ -1,12 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
 
 export type JobDocument = Job & Document;
 
 @Schema({ toJSON: { virtuals: true }, toObject: { virtuals: true } })
 export class Job {
   @Prop({ required: true })
-  _id: string;
+  api_id: string;
 
   @Prop({ required: true })
   name: string;

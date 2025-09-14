@@ -2,6 +2,11 @@ import { IsString, IsNotEmpty, IsNumber, IsObject } from 'class-validator';
 import { ApiProperty, PartialType } from '@nestjs/swagger';
 
 export class JobDto {
+    @ApiProperty({ example: '1', description: 'Api ID.' })
+    @IsString()
+    @IsNotEmpty()
+    api_id: string;
+    
     @ApiProperty({ example: 'Warrior', description: "Job's name." })
     @IsString()
     @IsNotEmpty()

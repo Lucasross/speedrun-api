@@ -9,6 +9,7 @@ import { StatModule } from './stat/stat.module';
 import { SkillModule } from './skill/skill.module';
 import { AreaModule } from './area/area.module';
 import { MonsterModule } from './monster/monster.module';
+import { SectorModule } from './sector/sector.module';
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import { MonsterModule } from './monster/monster.module';
       ssl: true,  
       family: 4,
       serverSelectionTimeoutMS: 5000,}), 
-    JobModule, AuthModule, StatModule, SkillModule, AreaModule, MonsterModule
+    JobModule, AuthModule, StatModule, SkillModule, AreaModule, MonsterModule, SectorModule
   ],
   controllers: [AppController],
   providers: [AppService],
