@@ -24,7 +24,8 @@
     "seed:skill": "npm run seed -- skill",
     "seed:area": "npm run seed -- area",
     "seed:monster": "npm run seed -- monster",
-    "seed:sector": "npm run seed -- sector"
+    "seed:sector": "npm run seed -- sector",
+    "seed:equipment": "npm run seed -- equipment"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
